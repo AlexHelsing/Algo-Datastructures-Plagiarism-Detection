@@ -2,10 +2,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Scanner;
+import java.security.Key;
+import java.util.*;
 import java.util.stream.StreamSupport;
 import java.util.stream.Collectors;
 
@@ -99,6 +97,19 @@ public class PlagiarismDetector {
     static BST<Ngram, ArrayList<Path>> buildIndex(BST<Path, Ngram[]> files) {
         BST<Ngram, ArrayList<Path>> index = new BST<Ngram, ArrayList<Path>>();
         // TODO: Build index of n-grams.
+
+        for (Iterator<Path> it = files.iterator(); it.hasNext();) {
+            Path path = it.next();
+            for (Ngram ngram : files.get(path)) {
+                if (!index.containsKey(ngram)) {
+                    ArrayList array = new ArrayList();
+                    array.add(path);
+                    index.put(ngram, array);
+                } else {
+                    index.get(ngram).add(path);
+                }
+            }
+        }
         return index;
     }
 
@@ -108,24 +119,19 @@ public class PlagiarismDetector {
         // N.B. Path is Java's class for representing filenames.
         // PathPair represents a pair of Paths (see PathPair.java).
         BST<PathPair, Integer> similarity = new BST<PathPair, Integer>();
-        for (Path path1 : files) {
-            for (Path path2 : files) {
-                if (path1.equals(path2))
-                    continue;
 
-                Ngram[] ngrams1 = files.get(path1);
-                Ngram[] ngrams2 = files.get(path2);
-                for (Ngram ngram1 : ngrams1) {
-                    for (Ngram ngram2 : ngrams2) {
-                        if (ngram1.equals(ngram2)) {
+                for (Ngram ngram : index) {
+                    for (Path path1 : index.get(ngram)) {
+                        for (Path path2 : index.get(ngram)) {
+                        if (path1.equals(path2)) continue;
                             PathPair pair = new PathPair(path1, path2);
                             if (!similarity.containsKey(pair))
                                 similarity.put(pair, 0);
                             similarity.put(pair, similarity.get(pair) + 1);
-                        }
+
                     }
+
                 }
-            }
         }
 
         return similarity;
