@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.Key;
 import java.util.*;
 import java.util.stream.StreamSupport;
 import java.util.stream.Collectors;
@@ -44,15 +43,15 @@ public class PlagiarismDetector {
         Stopwatch stopwatch2 = new Stopwatch();
 
         // Read all input files.
-        BST<Path, Ngram[]> files = readPaths(paths);
+        ScapegoatTree<Path, Ngram[]> files = readPaths(paths);
         stopwatch.finished("Reading all input files");
 
         // Build index of n-grams (not implemented yet).
-        BST<Ngram, ArrayList<Path>> index = buildIndex(files);
+        ScapegoatTree<Ngram, ArrayList<Path>> index = buildIndex(files);
         stopwatch.finished("Building n-gram index");
 
         // Compute similarity of all file pairs.
-        BST<PathPair, Integer> similarity = findSimilarity(files, index);
+        ScapegoatTree<PathPair, Integer> similarity = findSimilarity(files, index);
         stopwatch.finished("Computing similarity scores");
 
         // Find most similar file pairs, arranged in decreasing order of similarity.
@@ -76,8 +75,8 @@ public class PlagiarismDetector {
     }
 
     // Phase 1: Read in each file and chop it into n-grams.
-    static BST<Path, Ngram[]> readPaths(Path[] paths) throws IOException {
-        BST<Path, Ngram[]> files = new BST<Path, Ngram[]>();
+    static ScapegoatTree<Path, Ngram[]> readPaths(Path[] paths) throws IOException {
+        ScapegoatTree<Path, Ngram[]> files = new ScapegoatTree<>();
         for (Path path : paths) {
             String contents = new String(Files.readAllBytes(path));
             Ngram[] ngrams = Ngram.ngrams(contents, 5);
@@ -94,12 +93,11 @@ public class PlagiarismDetector {
     }
 
     // Phase 2: Build index of n-grams (not implemented yet).
-    static BST<Ngram, ArrayList<Path>> buildIndex(BST<Path, Ngram[]> files) {
-        BST<Ngram, ArrayList<Path>> index = new BST<Ngram, ArrayList<Path>>();
+    static ScapegoatTree<Ngram, ArrayList<Path>> buildIndex(ScapegoatTree<Path, Ngram[]> files) {
+        ScapegoatTree<Ngram, ArrayList<Path>> index = new ScapegoatTree<>();
         // TODO: Build index of n-grams.
 
-        for (Iterator<Path> it = files.iterator(); it.hasNext();) {
-            Path path = it.next();
+        for (Path path : files) {
             for (Ngram ngram : files.get(path)) {
                 if (!index.containsKey(ngram)) {
                     ArrayList array = new ArrayList();
@@ -114,31 +112,30 @@ public class PlagiarismDetector {
     }
 
     // Phase 3: Count how many n-grams each pair of files has in common.
-    static BST<PathPair, Integer> findSimilarity(BST<Path, Ngram[]> files, BST<Ngram, ArrayList<Path>> index) {
+    static ScapegoatTree<PathPair, Integer> findSimilarity(ScapegoatTree<Path, Ngram[]> files, ScapegoatTree<Ngram, ArrayList<Path>> index) {
         // TODO: Use index to make this function much more efficient.
         // N.B. Path is Java's class for representing filenames.
         // PathPair represents a pair of Paths (see PathPair.java).
-        BST<PathPair, Integer> similarity = new BST<PathPair, Integer>();
+        ScapegoatTree<PathPair, Integer> similarity = new ScapegoatTree<>();
 
-                for (Ngram ngram : index) {
-                    for (Path path1 : index.get(ngram)) {
-                        for (Path path2 : index.get(ngram)) {
-                        if (path1.equals(path2)) continue;
-                            PathPair pair = new PathPair(path1, path2);
-                            if (!similarity.containsKey(pair))
-                                similarity.put(pair, 0);
-                            similarity.put(pair, similarity.get(pair) + 1);
-
-                    }
-
+        for (Ngram ngram : index) {
+            for (Path path1 : index.get(ngram)) {
+                for (Path path2 : index.get(ngram)) {
+                    if (path1.equals(path2)) continue;
+                    PathPair pair = new PathPair(path1, path2);
+                    if (!similarity.containsKey(pair))
+                        similarity.put(pair, 0);
+                    similarity.put(pair, similarity.get(pair) + 1);
                 }
+            }
         }
 
         return similarity;
     }
 
+
     // Phase 4: find all pairs of files with more than 30 n-grams in common, sorted in descending order of similarity.
-    static ArrayList<PathPair> findMostSimilar(BST<PathPair, Integer> similarity) {
+    static ArrayList<PathPair> findMostSimilar(ScapegoatTree<PathPair, Integer> similarity) {
         // We use the Java 8 streams API - see the comment to the 'readPaths' method for more information.
         // Convert allPathPairs into a stream.
         // This is a bit more complicated than it should be because BST doesn't implement the streaming API.
