@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class PlagiarismDetector {
 
     // To change to using a scapegoat tree, change the line below by replacing NonbalancingBST with ScapegoatTree
-    static class BST<K extends Comparable<K>, V> extends NonbalancingBST<K, V> { }
+    static class BST<K extends Comparable<K>, V> extends ScapegoatTree<K, V> { }
 
     public static void main(String[] args) throws IOException {
         // If you don't want to specify arguments on the command-line, just uncomment the below block.

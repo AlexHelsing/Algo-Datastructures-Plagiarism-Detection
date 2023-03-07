@@ -147,18 +147,33 @@ public class ScapegoatTree<Key extends Comparable<Key>, Value> implements Iterab
         int cmp = key.compareTo(node.key);
 
         // TODO: finish implementing put.
-        // If you like you can start from the code for put in NonbalancingBST.java.
-        // Read the lab instructions for more hints!
-        if (cmp < 0) {
-            // key is less than node.key
-        } else if (cmp > 0) {
-            // key is greater than node.key
-        } else {
-            // key is equal to node.key
-        }
+            if (cmp < 0) {
+                node.left = put(node.left, key, val);
+            } else if (cmp > 0) {
+                node.right = put(node.right, key, val);
+            } else {
 
-        throw new UnsupportedOperationException();
-    }
+            }
+            // If you like you can start from the code for put in NonbalancingBST.java.
+            // Read the lab instructions for more hints!
+            if (cmp < 0) {
+                // key is less than node.key
+            } else if (cmp > 0) {
+                // key is greater than node.key
+            } else {
+                node.val = val;
+            }
+            node.size = 1 + size(node.left) + size(node.right);
+            if (height(node.left) < height(node.right)) {
+                node.height = height(node.right) + 1;
+            } else {
+                node.height = height(node.left) + 1;
+            }
+            if (node.height > alpha * log2(node.size)) {
+                node = rebuild(node);
+            }
+            return node;
+        }
 
     // Rebuild a tree to make it perfectly balanced.
     // You do not need to change this method, but need to define 'inorder' and 'balanceNodes'.
