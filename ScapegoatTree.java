@@ -179,7 +179,12 @@ public class ScapegoatTree<Key extends Comparable<Key>, Value> implements Iterab
     private void inorder(Node node, ArrayList<Node> nodes) {
         // TODO: use in-order traversal to store 'node'
         // and all descendants into 'nodes' ArrayList
-        throw new UnsupportedOperationException();
+        if (node == null) {
+            return;
+        }
+        inorder(node.left,nodes);
+        nodes.add(node);
+        inorder(node.right,nodes);
     }
 
     // Construct a balanced BST out of the nodes in `nodes` between `lo` and `hi`.
@@ -202,9 +207,17 @@ public class ScapegoatTree<Key extends Comparable<Key>, Value> implements Iterab
         // (4) Set the node's children to the BSTs returned by the two recursive calls you made in step (1).
         // (5) Correctly set the 'size' and 'height' fields for the node.
         // (6) Return the node!
-        throw new UnsupportedOperationException();
-    }
+        int mid = (lo+hi)/2;
 
+        Node result = new Node(nodes.get(mid).key, nodes.get(mid).val);
+
+        result.left = balanceNodes(nodes, lo, mid-1);
+        result.right = balanceNodes(nodes, mid+1, hi);
+        result.size = 1 + size(result.left) + size(result.right);
+        result.height = 1 + Math.max(height(result.left), height(result.right));
+
+        return result;
+    }
     /**
      * Returns all keys in the map as an {@code Iterable}.
      * To iterate over all of the keys in the map named {@code st},
