@@ -43,6 +43,9 @@ Computing similarity scores took 565,77 seconds.
 Finding the most similar files took 0,02 seconds.
 In total the program took 565,99 seconds.
 
+Since the complexity is quadratic and the medium file is 10 times the size of the small file, we were not
+surprised that it took ca 566 seconds.
+
 
 TODO
 
