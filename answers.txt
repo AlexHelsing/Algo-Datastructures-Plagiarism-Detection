@@ -3,8 +3,8 @@ Plagiarism detection
 
 Time spent per group member:
 * Stefan Ingimarsson 12hrs
-* TODO: TODO
-* TODO: TODO
+* Henrik: 11 hrs
+* Alexander Helsing: 11hrs
 
 Task 1: Analyzing the slow program
 ----------------------------------
@@ -54,6 +54,11 @@ TODO
 How long do you predict the program would take to run on
 the 'huge' directory? Show your calculations.
 
+565.99 seconds to do the medium file. The huge file is 20 times larger. Therefore, we
+multiply 565.99 x 20 = 11319,8 seconds.
+
+We predict it will take approximately 2,5 hours for the program to run the 'huge' directory.
+
 TODO
 
 Task 2: Using an index
@@ -64,6 +69,11 @@ Which of the three BSTs in the program usually become unbalanced?
 Say very briefly:
 - how you observed this,
 - why you think this is the case.
+
+Nonbalancing BSTs usually become unbalanced when it comes to the larger directories.
+A nonbalancing tree is not designed to balance itself automatically. This means that
+if the data being inserted into the tree is not added in a balanced manner, the tree
+can become unbalanced.
 
 TODO
 
@@ -118,10 +128,15 @@ TODO
 **Question**
 Did you encounter any serious problems?
 
+Not really, no.
+
 TODO
 
 **Question**
 What is your feedback on this assignment?
--It was pretty confusing at first with ngrams and what we actually needed to do in task 2. However once we understood everything, things got a little easier.
+-It was pretty confusing at first with ngrams and what we actually needed to do in task 2.
+However once we understood everything, things got a little easier.
+-Extremely challenging but very informative. It has given several 'aha' moments when one
+ finally understands a concept.
 
 TODO
