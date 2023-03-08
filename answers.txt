@@ -15,11 +15,12 @@ Answer in terms of N, the total number of 5-grams in the input files.
 Assume that the number of duplicate occurrences of 5-grams is a small constant - that is, there is not much plagiarised text.
 Explain briefly.
 
-The complexity for buildindex should be O(nm(log(n)) and findsimilairity should be o(n^2. The outer
-loop runs through the files x amount of times, the second loop also iterates through the files, except
-the current file being processed by the outer loop, so it runs x-1 times. The two inner loops run through
-all the ngrams in each file y times. In the end the total number of the two inner loops is about x^2*y^2
-which should be n^2.
+The complexity for buildindex should be O(1) and findsimilairity should be o(n^2 * k^2).
+
+findsimilairity: n is the number of files and k is the length of ngrams. there are two nested loops
+iterating all over the files and within those two nested loops there are two more nested loops.
+
+buildindex: it just creates an empty bst and returns without doing much else.
 
 TODO
 
@@ -80,14 +81,16 @@ We assume there is a (small) constant number of duplicate occurrences of 5-grams
 **Question**
 What is the asymptotic complexity of buildIndex?
 Justify briefly.
-O(n log(n)
+O(nm) where n is the number of documents and m is the number of 5grams per document. the outer loop
+iterates over n and the inner loop iterates over m.
 
 TODO
 
 **Question**
 What is the asymptotic complexity of findSimilarity?
 Justify briefly.
-O(n log(n)
+O(n^2) where n is the total number of ngrams in the document set. because there are two nested loops
+that iterate over all the files in the input.
 
 TODO
 
