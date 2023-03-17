@@ -44,8 +44,8 @@ Computing similarity scores took 565,77 seconds.
 Finding the most similar files took 0,02 seconds.
 In total the program took 565,99 seconds.
 
-Since the complexity is quadratic and the medium file is 10 times the size of the small file, we were not
-surprised that it took ca 566 seconds.
+Since the complexity is quadratic and the medium file is 10 times the size of the small file (10^^=100), we are
+a bit surprised that it took that much longer.
 
 
 TODO
@@ -54,10 +54,8 @@ TODO
 How long do you predict the program would take to run on
 the 'huge' directory? Show your calculations.
 
-565.99 seconds to do the medium file. The huge file is 20 times larger. Therefore, we
-multiply 565.99 x 20 = 11319,8 seconds.
-
-We predict it will take approximately 2,5 hours for the program to run the 'huge' directory.
+Huge directory = 4 million N. Medium directory = 200k N, 20 times less. 20^2 = 400 so 566*400 = 226 400 sec,
+which is 3773 minutes, which is about 63 hours.
 
 TODO
 
@@ -91,7 +89,7 @@ We assume there is a (small) constant number of duplicate occurrences of 5-grams
 **Question**
 What is the asymptotic complexity of buildIndex?
 Justify briefly.
-O(nm) where n is the number of documents and m is the number of 5grams per document. the outer loop
+O(n*m) where n is the number of documents and m is the number of 5grams per document. the outer loop
 iterates over n and the inner loop iterates over m.
 
 TODO
@@ -99,8 +97,7 @@ TODO
 **Question**
 What is the asymptotic complexity of findSimilarity?
 Justify briefly.
-O(n^2) where n is the total number of ngrams in the document set. because there are two nested loops
-that iterate over all the files in the input.
+O(n log n) where n is the total number of ngrams in the document set.
 
 TODO
 
@@ -122,6 +119,11 @@ TODO
 Did you collaborate with any other students on this lab?
 If so, write with whom and in what way you collaborated.
 Also list any resources (including the web) you have used in creating your design.
+
+The readme was great and we read through that a lot. Also used the openDSA a lot, especially for understanding the trees.
+Otherwise there was a lot of googles searches and youtube videos regarding n-grams and scapegoat trees.
+Received some help from previous CS student, but as in lab 2 it was tough to understand for him as well, but he could
+help us wrap our brain around some concepts.
 
 TODO
 
