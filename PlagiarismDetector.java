@@ -97,8 +97,8 @@ public class PlagiarismDetector {
         BST<Ngram, ArrayList<Path>> index = new BST<Ngram, ArrayList<Path>>();
         // TODO: Build index of n-grams.
 
-        for (Iterator<Path> it = files.iterator(); it.hasNext();) {
-            Path path = it.next();
+        for (Path path : files) {
+            Ngram[] ngrams = files.get(path);
             for (Ngram ngram : files.get(path)) {
                 if (!index.containsKey(ngram)) {
                     ArrayList array = new ArrayList();
