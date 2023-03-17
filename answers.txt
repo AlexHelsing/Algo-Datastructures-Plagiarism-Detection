@@ -15,12 +15,18 @@ Answer in terms of N, the total number of 5-grams in the input files.
 Assume that the number of duplicate occurrences of 5-grams is a small constant - that is, there is not much plagiarised text.
 Explain briefly.
 
-The complexity for buildindex should be O(1) and findsimilairity should be O(Nlog N).
+The complexity for buildindex should be O(1) and findsimilairity should be o(n^2 * k^2).
 
-findsimilairity: n is the number of files and k is the length of ngrams. there are two nested loops
-iterating all over the files and within those two nested loops there are two more nested loops.
-
-buildindex: it just creates an empty bst and returns without doing much else.
+findsimilairity: the outer loop iterates over each ngram object in the index bst. since index is a bst,
+it has o(log n) time complexity, where n is the number of unique ngram. with that in mind, outer loop is
+o(n log n). the inner loops iterate over path object that is associated with the ngram. worst case, all
+documents share the same ngram, so the inner two loops execute for every pair of path obj in the index.
+this is k*(k-1)/2 iterations for each ngrams. since there are n unique ngram obj in the index, the total
+number of iterations is k*(k-1)*n/2. the innermost loop a pathpair obj is created and used as key in
+similarity. containskey, get and put methods have o(log m) where m is the number of key-value pairs in bst.
+similarity can have at most n*(n-1)/2 key value pairs(one for each unique pair of path objects). the complexity
+is o(n^2 log n). overall comlexity is o(n^2 log n). in d*k terms, where n=d*k, we can write it as: o(n^2 log n)=
+o((dk)^2 log(dk)) = o(d^2 k^2 log(dk)).
 
 TODO
 
@@ -68,10 +74,10 @@ Say very briefly:
 - how you observed this,
 - why you think this is the case.
 
-The most unbalanced tree is likely to be the one that has the most nodes added or removed from it.
-The index BST is the most unbalanced because it has the most nodes added to it; one node for each n-gram in each file.
-To see which BST is the most unbalanced, you can print out the height of each tree. The higher the tree, the more unbalanced the BST.
-
+Nonbalancing BSTs usually become unbalanced when it comes to the larger directories.
+A nonbalancing tree is not designed to balance itself automatically. This means that
+if the data being inserted into the tree is not added in a balanced manner, the tree
+can become unbalanced.
 
 TODO
 
@@ -89,19 +95,18 @@ We assume there is a (small) constant number of duplicate occurrences of 5-grams
 **Question**
 What is the asymptotic complexity of buildIndex?
 Justify briefly.
-O(n*m) where n is the number of documents and m is the number of 5grams per document. the outer loop
-iterates over n and the inner loop iterates over m.
+O(nk log(nk)), where n is the number of path objects in the files bst and k is average number of ngram obj
+per ngram array in the files. the innermost loop iterates over ngram obj in each ngram for each path in files.
+so the innermost loop affects the complexity the most. since the index bst can have at most n*k key-value pairs,
+the time complexity of the inner loop is o(nk log(nk)). the outer loop is o(n log n) where n is the number of path
+obj in the files bst, since the bst has o(log n) time. therefore the complexity is o(nk log(nk)).
 
 TODO
 
 **Question**
 What is the asymptotic complexity of findSimilarity?
 Justify briefly.
-In the worst case scenario, the outer loop traverses through all n-grams in the index, which has a time complexity of O(N log N).
-For every n-gram, the inner loop examines all pairs of files that hold the specific n-gram.
-
-
-
+O(n log n) where n is the total number of ngrams in the document set.
 
 TODO
 
