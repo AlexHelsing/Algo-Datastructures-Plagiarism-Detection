@@ -15,7 +15,7 @@ Answer in terms of N, the total number of 5-grams in the input files.
 Assume that the number of duplicate occurrences of 5-grams is a small constant - that is, there is not much plagiarised text.
 Explain briefly.
 
-The complexity for buildindex should be O(1) and findsimilairity should be o(n^2 * k^2).
+The complexity for buildindex should be O(1) and findsimilairity should be O(Nlog N).
 
 findsimilairity: n is the number of files and k is the length of ngrams. there are two nested loops
 iterating all over the files and within those two nested loops there are two more nested loops.
@@ -68,10 +68,10 @@ Say very briefly:
 - how you observed this,
 - why you think this is the case.
 
-Nonbalancing BSTs usually become unbalanced when it comes to the larger directories.
-A nonbalancing tree is not designed to balance itself automatically. This means that
-if the data being inserted into the tree is not added in a balanced manner, the tree
-can become unbalanced.
+The most unbalanced tree is likely to be the one that has the most nodes added or removed from it.
+The index BST is the most unbalanced because it has the most nodes added to it; one node for each n-gram in each file.
+To see which BST is the most unbalanced, you can print out the height of each tree. The higher the tree, the more unbalanced the BST.
+
 
 TODO
 
@@ -97,7 +97,11 @@ TODO
 **Question**
 What is the asymptotic complexity of findSimilarity?
 Justify briefly.
-O(n log n) where n is the total number of ngrams in the document set.
+In the worst case scenario, the outer loop traverses through all n-grams in the index, which has a time complexity of O(N log N).
+For every n-gram, the inner loop examines all pairs of files that hold the specific n-gram.
+
+
+
 
 TODO
 
