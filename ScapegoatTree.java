@@ -157,11 +157,7 @@ public class ScapegoatTree<Key extends Comparable<Key>, Value> implements Iterab
             // If you like you can start from the code for put in NonbalancingBST.java.
             // Read the lab instructions for more hints!
             node.size = 1 + size(node.left) + size(node.right);
-            if (height(node.left) < height(node.right)) {
-                node.height = height(node.right) + 1;
-            } else {
-                node.height = height(node.left) + 1;
-            }
+            node.height = 1 + Math.max(height(node.left), height(node.right));
             if (node.height > alpha * log2(node.size) + 1) {
                 node = rebuild(node);
             }

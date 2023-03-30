@@ -15,18 +15,15 @@ Answer in terms of N, the total number of 5-grams in the input files.
 Assume that the number of duplicate occurrences of 5-grams is a small constant - that is, there is not much plagiarised text.
 Explain briefly.
 
-The complexity for buildindex should be O(1) and findsimilairity should be o(n^2 * k^2).
+in the original findsimialrity, before we modified it; we start by looping through each path in the first input
+binary tree, denoted as files. we do this with two paths, path1 and path2. we check if the paths are the same, in that case we
+skip them. this should have complexity o(n).
 
-findsimilairity: the outer loop iterates over each ngram object in the index bst. since index is a bst,
-it has o(log n) time complexity, where n is the number of unique ngram. with that in mind, outer loop is
-o(n log n). the inner loops iterate over path object that is associated with the ngram. worst case, all
-documents share the same ngram, so the inner two loops execute for every pair of path obj in the index.
-this is k*(k-1)/2 iterations for each ngrams. since there are n unique ngram obj in the index, the total
-number of iterations is k*(k-1)*n/2. the innermost loop a pathpair obj is created and used as key in
-similarity. containskey, get and put methods have o(log m) where m is the number of key-value pairs in bst.
-similarity can have at most n*(n-1)/2 key value pairs(one for each unique pair of path objects). the complexity
-is o(n^2 log n). overall comlexity is o(n^2 log n). in d*k terms, where n=d*k, we can write it as: o(n^2 log n)=
-o((dk)^2 log(dk)) = o(d^2 k^2 log(dk)).
+we then get the arrays of ngrams for both paths and loop through them, one array after the other. looping
+through one array should take o(n), and since we have two arrays that task should be o(n^2).
+
+we then compare the ngrams in the arrays and create a pathpair object with the two paths. if the pathpair is
+not already in the bst we add it. adding elements to bst is o(1). all together we get o(n^3).
 
 TODO
 
@@ -77,7 +74,9 @@ Say very briefly:
 Nonbalancing BSTs usually become unbalanced when it comes to the larger directories.
 A nonbalancing tree is not designed to balance itself automatically. This means that
 if the data being inserted into the tree is not added in a balanced manner, the tree
-can become unbalanced.
+can become unbalanced. Files usually become unbalanced as the addition of new nodes
+skews the height of the tree. If new nodes are inserted in a sorted order, it can
+result in a skewed tree where all the nodes are in one direction.
 
 TODO
 
@@ -95,18 +94,18 @@ We assume there is a (small) constant number of duplicate occurrences of 5-grams
 **Question**
 What is the asymptotic complexity of buildIndex?
 Justify briefly.
-O(nk log(nk)), where n is the number of path objects in the files bst and k is average number of ngram obj
-per ngram array in the files. the innermost loop iterates over ngram obj in each ngram for each path in files.
-so the innermost loop affects the complexity the most. since the index bst can have at most n*k key-value pairs,
-the time complexity of the inner loop is o(nk log(nk)). the outer loop is o(n log n) where n is the number of path
-obj in the files bst, since the bst has o(log n) time. therefore the complexity is o(nk log(nk)).
+o(n log n). we start by iterating through the ngrams in the paths. we check if the ngrams contain the keys.
+if they do not contain the key, we add it to an array, and add the array to the bst. if they contain the key,
+we add it directly to the bst.
 
 TODO
 
 **Question**
 What is the asymptotic complexity of findSimilarity?
 Justify briefly.
-O(n log n) where n is the total number of ngrams in the document set.
+O(n log n). the outer loop iterates through the ngrams, which has complexity o(n).
+and the next loops compare the ngram in path1 to the ngram in path2 which has complexity o(log n).
+these together should have the complexity o(n log n).
 
 TODO
 
